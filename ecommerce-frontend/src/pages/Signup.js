@@ -33,12 +33,38 @@ const Signup = () => {
         }}
       >
         <Typography variant="h4" gutterBottom>Sign Up</Typography>
-        {error && <Typography color="error">{error.message}</Typography>}
+        {error && <Typography color="error">{typeof error === 'string' ? error : error.message}</Typography>}
         <form onSubmit={handleSubmit}>
-          <TextField fullWidth label="Name" name="name" margin="normal" onChange={handleChange} required />
-          <TextField fullWidth label="Email" name="email" type="email" margin="normal" onChange={handleChange} required />
-          <TextField fullWidth label="Password" name="password" type="password" margin="normal" onChange={handleChange} required />
-          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }} disabled={loading}>
+        <TextField
+  fullWidth
+  label="Name"
+  name="name"
+  value={formData.name}
+  onChange={handleChange}
+  margin="normal"
+  required
+/>
+<TextField
+  fullWidth
+  label="Email"
+  name="email"
+  type="email"
+  value={formData.email}
+  onChange={handleChange}
+  margin="normal"
+  required
+/>
+<TextField
+  fullWidth
+  label="Password"
+  name="password"
+  type="password"
+  value={formData.password}
+  onChange={handleChange}
+  margin="normal"
+  required
+/>
+<Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }} disabled={loading}>
             {loading ? 'Signing Up...' : 'Sign Up'}
           </Button>
         </form>

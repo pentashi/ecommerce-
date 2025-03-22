@@ -20,14 +20,13 @@ const Login = () => {
     const result = await dispatch(loginUser(formData));
     if (loginUser.fulfilled.match(result)) {
       const isAdmin = result.payload.isAdmin;
-      navigate(isAdmin ? '/admin' : '/dashboard'); // Redirect to admin dashboard if admin
+      navigate(isAdmin ? '/admin' : '/dashboard');
     }
-    
   };
 
-  // Modified to point to backend's OAuth endpoint (adjust the URL if necessary)
+  // Use environment variable for backend URL
   const handleOAuthLogin = (provider) => {
-    window.location.href = `http://localhost:5000/api/auth/${provider}`;
+    window.location.href = `${process.env.REACT_APP_API_URL}/api/auth/${provider}`;
   };
 
   return (

@@ -6,7 +6,10 @@ export const fetchProducts = createAsyncThunk(
   "products/fetchProducts",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("http://localhost:5000/api/products");
+      // Use the environment variable for the API URL
+      const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:5000/api"; // Default to localhost if the env variable is not set
+
+      const response = await axios.get(`${apiUrl}/products`);
       return response.data; // This returns an object: { products: [...], totalCount: 1 }
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to fetch products");

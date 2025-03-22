@@ -29,7 +29,7 @@ const AdminDashboard = () => {
           throw new Error('User not authenticated');
         }
 
-        const res = await axios.get('http://localhost:5000/api/products/', {
+        const res = await axios.get(`${process.env.REACT_APP_URL}/api/products/`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
@@ -52,7 +52,7 @@ const AdminDashboard = () => {
           throw new Error('User not authenticated');
         }
 
-        const res = await axios.get('http://localhost:5000/api/orders/', {
+        const res = await axios.get(`${process.env.REACT_APP_URL}/api/orders/`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
@@ -109,7 +109,7 @@ const AdminDashboard = () => {
         throw new Error('User not authenticated');
       }
 
-      const res = await axios.delete(`http://localhost:5000/api/products/${productId}`, {
+      const res = await axios.delete(`${process.env.REACT_APP_URL}/api/products/${productId}`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
@@ -217,54 +217,57 @@ const AdminDashboard = () => {
               <Card sx={{ padding: 3, boxShadow: 6, borderRadius: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
                 <ShoppingCart sx={{ fontSize: 50, color: 'primary.main', mb: 2 }} />
                 <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'text.primary' }}>Total Products</Typography>
-                <Typography variant="h5" color="text.primary">{loading ? 'Loading...' : products.length}</Typography>
+                <Typography variant="h4" sx={{ color: 'primary.main' }}>{products.length}</Typography>
               </Card>
             </Grid>
-
+            
             {/* Total Orders Card */}
             <Grid item xs={12} sm={6} md={3}>
               <Card sx={{ padding: 3, boxShadow: 6, borderRadius: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
                 <ViewList sx={{ fontSize: 50, color: 'primary.main', mb: 2 }} />
                 <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'text.primary' }}>Total Orders</Typography>
-                <Typography variant="h5" color="text.primary">{loading ? 'Loading...' : ordersCount}</Typography>
+                <Typography variant="h4" sx={{ color: 'primary.main' }}>{ordersCount}</Typography>
               </Card>
             </Grid>
-
-            {/* Revenue Card */}
+            
+            {/* Add Product Card */}
             <Grid item xs={12} sm={6} md={3}>
               <Card sx={{ padding: 3, boxShadow: 6, borderRadius: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', transition: 'transform 0.3s', '&:hover': { transform: 'scale(1.05)' } }}>
                 <AddCircle sx={{ fontSize: 50, color: 'primary.main', mb: 2 }} />
-                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'text.primary' }}>Revenue</Typography>
-                <Typography variant="h5" color="text.primary">$0</Typography>
+                <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'text.primary' }}>Add Product</Typography>
+                <Button variant="contained" onClick={() => navigate('/admin/product-upload')} sx={{ marginTop: 2 }}>Upload New Product</Button>
               </Card>
             </Grid>
           </Grid>
         </Box>
 
-        {/* Product List */}
+        {/* Product List Section */}
         <Box sx={{ padding: 4 }}>
-          <Typography variant="h5" sx={{ fontWeight: 'bold', marginBottom: 3, color: 'text.primary' }}>Product List</Typography>
-          <Grid container spacing={3}>
-            {products.map((product) => (
-              <Grid item xs={12} sm={6} md={4} key={product._id}>
-                <Card sx={{ padding: 3, boxShadow: 6, borderRadius: 3 }}>
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 2 }}>
+          <Typography variant="h4" sx={{ fontWeight: 'bold', marginBottom: 4, color: 'text.primary' }}>Products</Typography>
+          {loading ? (
+            <Typography variant="h6" sx={{ color: 'text.primary' }}>Loading...</Typography>
+          ) : (
+            <Grid container spacing={3}>
+              {products.map((product) => (
+                <Grid item xs={12} sm={6} md={4} key={product._id}>
+                  <Card sx={{ padding: 3, boxShadow: 6, borderRadius: 3, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <Avatar src={product.imageUrl} sx={{ width: 100, height: 100, mb: 2 }} />
                     <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'text.primary' }}>{product.name}</Typography>
-                    <Box>
-                      <IconButton onClick={() => handleEditProduct(product._id)} sx={{ color: 'primary.main' }}>
-                        <EditIcon />
+                    <Typography variant="body1" sx={{ color: 'text.secondary' }}>{product.description}</Typography>
+                    <Typography variant="h5" sx={{ fontWeight: 'bold', color: 'primary.main', mt: 2 }}>${product.price}</Typography>
+                    <Box sx={{ marginTop: 2, display: 'flex', gap: 1 }}>
+                      <IconButton onClick={() => handleEditProduct(product._id)}>
+                        <EditIcon sx={{ color: 'primary.main' }} />
                       </IconButton>
-                      <IconButton onClick={() => handleDeleteProduct(product._id)} sx={{ color: 'error.main' }}>
-                        <DeleteIcon />
+                      <IconButton onClick={() => handleDeleteProduct(product._id)}>
+                        <DeleteIcon sx={{ color: 'primary.main' }} />
                       </IconButton>
                     </Box>
-                  </Box>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>{product.description}</Typography>
-                  <Typography variant="body1" sx={{ marginTop: 2, color: 'text.primary' }}>${product.price}</Typography>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Box>
       </Box>
     </Box>

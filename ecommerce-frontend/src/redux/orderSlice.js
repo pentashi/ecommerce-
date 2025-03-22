@@ -28,8 +28,11 @@ export const placeOrder = createAsyncThunk(
         return rejectWithValue("Cart items are invalid.");
       }
 
+      // Use environment variable for API base URL
+      const apiUrl = process.env.REACT_APP_API_URL; 
+
       const response = await axios.post(
-        "http://localhost:5000/api/orders/",
+        `${apiUrl}/orders/`,
         {
           items: formattedItems,
           totalPrice: orderData.totalPrice,
