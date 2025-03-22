@@ -26,7 +26,7 @@ const ProductEdit = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/products/${id}`);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/${id}`);
         setProduct(res.data);
       } catch (err) {
         console.error("Error fetching product:", err);
@@ -49,7 +49,7 @@ const ProductEdit = () => {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    setSuccessMessage('');
+    setSuccessMessage(''); // Clear previous success messages
 
     try {
       let imageUrl = product.imageUrl; // Keep existing image if not uploading new one
@@ -59,7 +59,7 @@ const ProductEdit = () => {
         const formData = new FormData();
         formData.append('image', image);
 
-        const uploadResponse = await axios.post('http://localhost:5000/api/upload', formData, {
+        const uploadResponse = await axios.post(`${process.env.REACT_APP_API_URL}/api/upload`, formData, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
             'Content-Type': 'multipart/form-data',
@@ -75,7 +75,7 @@ const ProductEdit = () => {
         imageUrl, // Add the Cloudinary image URL (either new or existing)
       };
 
-      await axios.put(`http://localhost:5000/api/products/${id}`, updatedProduct, {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/products/${id}`, updatedProduct, {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
           'Content-Type': 'application/json',

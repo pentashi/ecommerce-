@@ -19,7 +19,7 @@ const ProfilePage = () => {
     const fetchUserProfile = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await axios.get('http://localhost:5000/api/auth/profile', {
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(response.data);
@@ -54,7 +54,7 @@ const ProfilePage = () => {
 
       // Update name and avatar URL (if changed) in one go
       const updateResponse = await axios.put(
-        'http://localhost:5000/api/auth/profile',
+        `${process.env.REACT_APP_API_URL}/api/auth/profile`,
         { name: newName || user.name },
         {
           headers: {
@@ -65,7 +65,7 @@ const ProfilePage = () => {
 
       // If an avatar is selected, upload it to the backend
       if (newAvatar) {
-        const uploadResponse = await axios.post('http://localhost:5000/api/auth/upload-avatar', formData, {
+        const uploadResponse = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/upload-avatar`, formData, {
           headers: {
             Authorization: `Bearer ${token}`,
             'Content-Type': 'multipart/form-data',
