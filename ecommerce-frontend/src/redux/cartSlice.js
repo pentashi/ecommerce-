@@ -11,7 +11,7 @@ export const fetchCartFromBackend = createAsyncThunk(
       const token = getState().auth.token;
       if (!token) throw new Error("User not authenticated");
 
-      const response = await axios.get(`${API_URL}/cart`, { // ✅ Use API_URL
+      const response = await axios.get(`${API_URL}/cart`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       return response.data;
@@ -29,7 +29,7 @@ export const removeFromCartBackend = createAsyncThunk(
       const token = getState().auth.token;
       if (!token) throw new Error("User not authenticated");
 
-      await axios.delete(`${API_URL}/cart/${itemId}`, { // ✅ Use API_URL
+      await axios.delete(`${API_URL}/cart/${itemId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -48,7 +48,7 @@ export const addToCartBackend = createAsyncThunk(
       const token = getState().auth.token;
       if (!token) throw new Error("User not authenticated");
 
-      const response = await axios.post(`${API_URL}/cart`, productData, { // ✅ Use API_URL
+      const response = await axios.post(`${API_URL}/cart`, productData, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -67,7 +67,7 @@ export const clearCartBackend = createAsyncThunk(
       const token = getState().auth.token;
       if (!token) throw new Error("User not authenticated");
 
-      await axios.delete(`${API_URL}/cart`, { // ✅ Use API_URL
+      await axios.delete(`${API_URL}/cart`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -78,4 +78,46 @@ export const clearCartBackend = createAsyncThunk(
   }
 );
 
+// ✅ Create cart slice
+const cartSlice = createSlice({
+  name: "cart",
+  initialState: {
+    cartItems: [],
+    loading: false,
+    error: null,
+  },
+  reducers: {
+    addToCart: (state, action) => {
+      state.cartItems.push(action.payload);
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCartFromBackend.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchCartFromBackend.fulfilled, (state, action) => {
+        state.loading = false;
+        state.cartItems = action.payload;
+      })
+      .addCase(fetchCartFromBackend.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(removeFromCartBackend.fulfilled, (state, action) => {
+        state.cartItems = state.cartItems.filter(
+          (item) => item.id !== action.payload
+        );
+      })
+      .addCase(clearCartBackend.fulfilled, (state) => {
+        state.cartItems = [];
+      });
+  },
+});
+
+// ✅ Export actions
+export const { addToCart } = cartSlice.actions;
+
+// ✅ Export reducer
 export default cartSlice.reducer;
