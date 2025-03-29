@@ -29,7 +29,7 @@ const AdminDashboard = () => {
           throw new Error('User not authenticated');
         }
 
-        const res = await axios.get(`${process.env.REACT_APP_URL}/api/products/`, {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/products/`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
@@ -52,7 +52,7 @@ const AdminDashboard = () => {
           throw new Error('User not authenticated');
         }
 
-        const res = await axios.get(`${process.env.REACT_APP_URL}/api/orders/`, {
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/orders/`, {
           headers: {
             Authorization: `Bearer ${userToken}`,
           },
@@ -109,7 +109,7 @@ const AdminDashboard = () => {
         throw new Error('User not authenticated');
       }
 
-      const res = await axios.delete(`${process.env.REACT_APP_URL}/api/products/${productId}`, {
+      const res = await axios.delete(`${process.env.REACT_APP_API_URL}/api/products/${productId}`, {
         headers: {
           Authorization: `Bearer ${userToken}`,
         },
