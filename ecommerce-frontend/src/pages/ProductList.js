@@ -35,7 +35,7 @@ const ProductList = ({ search, category, minPrice, maxPrice }) => {
     setError(null);
 
     try {
-      const res = await axios.get("http://localhost:5000/api/products", {
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/products`, {
         params: { search, category, minPrice, maxPrice, page: currentPage, limit: 6 },
       });
       setProducts(res.data.products || []);
@@ -61,7 +61,7 @@ const ProductList = ({ search, category, minPrice, maxPrice }) => {
     setCartLoading(product._id);
     try {
       await axios.post(
-        "http://localhost:5000/api/cart",
+        `${process.env.REACT_APP_API_URL}/api/cart`,
         { productId: product._id, quantity: 1 },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -86,7 +86,7 @@ const ProductList = ({ search, category, minPrice, maxPrice }) => {
 
   const handleDeleteProduct = async (productId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/products/${productId}`, {
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/products/${productId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSnackbar({ open: true, message: "Product deleted successfully!", severity: "success" });
